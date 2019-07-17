@@ -22,9 +22,7 @@ A folder _bin_ must be created where all the results will be stored.
 The user must follow the following steps before running the analysis 
 ```bash 
 git clone https://github.com/jumagari14/RNA-Seq_pipe.git
-cd Tabacum_Galaxy
-tar xvzf RNA-Seq.tar.gz 
-cd RNA-Seq
+cd RNA-Seq_pipe
 mkdir -p -m 755 bin data
 mkdir -p -m 755 data/subdata
 ## Include all the necessary data in data and subdata folder
