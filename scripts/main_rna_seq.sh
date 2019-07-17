@@ -41,7 +41,7 @@ module load jdk1.8/8u22 ## Load corresponding java module available
 export LD_LIBRARY_PATH=/gpfs/softs/contrib/apps/gcc/7.3.0/lib64/:/gpfs/softs/contrib/apps/gcc/7.3.0/lib
 
 ## java -jar Trimmomatic-0.39/trimmomatic-0.39.jar PE -threads 1 -phred33 /media/jumagari/JUANMA/Stage/Galaxy_An/subdata/TAB0.3_1.fq.gz /media/jumagari/JUANMA/Stage/Galaxy_An/subdata/TAB0.3_2.fq.gz forw_par.gq.gz forw_unp.fq.gz rev_pair.fq.gz rev_unp.fq.gz ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq2-PE.fa:2:30:10 LEADING:25 TRAILING:25 SLIDINGWINDOW:5:20 MINLEN:50
-cd ~/ 
+cd ../ 
 list=$(ls ./data/subdata/*.fq.gz | xargs -n 1 basename | sed 's/\(.*\)_.*/\1/' | sort -u)
 
 mkdir -p -m 755 ./bin

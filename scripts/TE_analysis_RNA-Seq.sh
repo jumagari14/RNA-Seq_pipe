@@ -42,11 +42,11 @@ module load python/3.7.2
 export LD_LIBRARY_PATH=/gpfs/softs/contrib/apps/gcc/7.3.0/lib64/:/gpfs/softs/contrib/apps/gcc/7.3.0/lib
 
 ## java -jar Trimmomatic-0.39/trimmomatic-0.39.jar PE -threads 1 -phred33 /media/jumagari/JUANMA/Stage/Galaxy_An/subdata/TAB0.3_1.fq.gz /media/jumagari/JUANMA/Stage/Galaxy_An/subdata/TAB0.3_2.fq.gz forw_par.gq.gz forw_unp.fq.gz rev_pair.fq.gz rev_unp.fq.gz ILLUMINACLIP:./Trimmomatic-0.39/adapters/TruSeq2-PE.fa:2:30:10 LEADING:25 TRAILING:25 SLIDINGWINDOW:5:20 MINLEN:50
-cd ~/ 
+cd ../ 
 list=$(ls ./data/subdata/*.fq.gz | xargs -n 1 basename | sed 's/\(.*\)_.*/\1/' | sort -u)
 
-# mkdir -p -m 755 ./bin/trimm_data 
-# mkdir -p -m 755 ./bin/trimm_data/quality
+mkdir -p -m 755 ./bin/trimm_data 
+mkdir -p -m 755 ./bin/trimm_data/quality
 
 
 # gff=$(find ./data/ -not -path '*/\R*' -not -path '*/\.*' -name "*gff[3]*")
@@ -64,18 +64,18 @@ list=$(ls ./data/subdata/*.fq.gz | xargs -n 1 basename | sed 's/\(.*\)_.*/\1/' |
 
 gff2=$(find ./data/ -not -path '*/\R*' -path '*/\.*' -name "*gff[3]*")
 gff2=$(readlink -f $gff2)
-# if [ ! -d "./bin/genome_ind" ] 
-#  then  ## Genome indexes are generated if necessary 
-#     mkdir -m 755 -p ./bin/genome_ind 
-#     ./scripts/STAR \
-#     --runThreadN 16 \
-#     --runMode genomeGenerate \
-#     --genomeDir ./bin/genome_ind  \
-#     --genomeFastaFiles "$fasta" \
-#     --sjdbOverhang 149 \
-#     --sjdbGTFfile "$gtf" \
-#     --genomeChrBinNbits 12 # reduce RAM consumption
-# fi  
+if [ ! -d "./bin/genome_ind" ] 
+ then  ## Genome indexes are generated if necessary 
+    mkdir -m 755 -p ./bin/genome_ind 
+    ./scripts/STAR \
+    --runThreadN 16 \
+    --runMode genomeGenerate \
+    --genomeDir ./bin/genome_ind  \
+    --genomeFastaFiles "$fasta" \
+    --sjdbOverhang 149 \
+    --sjdbGTFfile "$gtf" \
+    --genomeChrBinNbits 12 # reduce RAM consumption
+fi  
 
 # ## Only to be run once 
 # # if [$1=="convert"] 
@@ -87,16 +87,16 @@ gff2=$(readlink -f $gff2)
 # # Uncompress gz files 
 # # parallel -j 2 "gunzip {}_1.fq.gz" ::: $list
 
-# mkdir -p -m 755 ./bin/STAR_Align  
-# mkdir -p -m 755 ./bin/counts
+mkdir -p -m 755 ./bin/STAR_Align  
+mkdir -p -m 755 ./bin/counts
 
-# parallel -j 3 "./scripts/FastQC/fastqc ./data/subdata/{}_1.fq.gz ./data/subdata/{}_2.fq.gz --outdir=./bin/trimm_data/quality" ::: $list
+parallel -j 3 "./scripts/FastQC/fastqc ./data/subdata/{}_1.fq.gz ./data/subdata/{}_2.fq.gz --outdir=./bin/trimm_data/quality" ::: $list
 
-# parallel -j 3 "java -jar ./scripts/Trimmomatic-0.39/trimmomatic-0.39.jar PE -threads 16 -phred33 ./data/subdata/{}_1.fq.gz ./data/subdata/{}_2.fq.gz ./bin/trimm_data/{}_1.par.fq.gz {}_1.unp.fq.gz ./bin/trimm_data/{}_2.par.fq.gz {}_2.unp.fq.gz ILLUMINACLIP:./scripts/Trimmomatic-0.39/adapters/TruSeq2-PE.fa:2:30:10 LEADING:25 TRAILING:25 SLIDINGWINDOW:5:20 MINLEN:50" ::: $list
+parallel -j 3 "java -jar ./scripts/Trimmomatic-0.39/trimmomatic-0.39.jar PE -threads 16 -phred33 ./data/subdata/{}_1.fq.gz ./data/subdata/{}_2.fq.gz ./bin/trimm_data/{}_1.par.fq.gz {}_1.unp.fq.gz ./bin/trimm_data/{}_2.par.fq.gz {}_2.unp.fq.gz ILLUMINACLIP:./scripts/Trimmomatic-0.39/adapters/TruSeq2-PE.fa:2:30:10 LEADING:25 TRAILING:25 SLIDINGWINDOW:5:20 MINLEN:50" ::: $list
 
-# parallel -j 3 "rm -rf {}_1.unp.fq.gz {}_2.unp.fq.gz" ::: $list
+parallel -j 3 "rm -rf {}_1.unp.fq.gz {}_2.unp.fq.gz" ::: $list
 
-# ./scripts/STAR --genomeLoad LoadAndExit --genomeDir ./bin/genome_ind # Load genome just once to save RAM memory 
+./scripts/STAR --genomeLoad LoadAndExit --genomeDir ./bin/genome_ind # Load genome just once to save RAM memory 
 
 parallel --compress -j 3 "./scripts/STAR --runThreadN 16 --runMode alignReads --genomeLoad LoadAndKeep --readFilesCommand zcat --outFilterMismatchNoverReadLmax 0.02 --outFilterMatchNmin 16 --outSAMtype BAM Unsorted SortedByCoordinate --limitBAMsortRAM 10000200000 --genomeDir ./bin/genome_ind  --outFileNamePrefix ./bin/STAR_Align/{} --readFilesIn ./bin/trimm_data/{}_1.par.fq.gz  ./bin/trimm_data/{}_2.par.fq.gz" ::: $list
 # # --genomeLoad LoadAndKeep: keep genome in memory  
