@@ -41,4 +41,5 @@ After running the pipeline, several folders are found in _bin_:
 
 In the main directory, a file _.tabular_ where all the counting results are saved is created. This file will mainly be used in the latter normalisation step.  
 
+The main script includes _parallel_ command. If this command is not available on the cluster where the analysis is run, the optional script (optional_rna-star.sh) must be run. 
 In the current repository, R files to perform the normalisation analysis and to extract extra information about _gff_ files are included. 
