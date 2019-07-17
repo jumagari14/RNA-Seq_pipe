@@ -21,7 +21,7 @@ On the _RNA-Seq_ folder, you will find the necessary tools to run a RNA-Seq pipe
 A folder _bin_ must be created where all the results will be stored. 
 The user must follow the following steps before running the analysis 
 ```bash 
-git clone https://github.com/jumagari14/Tabacum_Galaxy.git
+git clone https://github.com/jumagari14/RNA-Seq_pipe.git
 cd Tabacum_Galaxy
 tar xvzf RNA-Seq.tar.gz 
 cd RNA-Seq
