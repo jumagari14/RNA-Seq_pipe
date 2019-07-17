@@ -78,7 +78,7 @@ fi
 # fi
 
 # Uncompress gz files 
-parallel -j 2 "gunzip {}_1.fq.gz" ::: $list
+# parallel -j 2 "gunzip {}_1.fq.gz" ::: $list
 
 mkdir -p -m 755 ./bin/STAR_Align  
 mkdir -p -m 755 ./bin/counts
