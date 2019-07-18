@@ -10,6 +10,12 @@ Some tools need to be downloaded and compiled in order to run the pipeline avail
 * featureCounts: http://bioinf.wehi.edu.au/featureCounts/
 
 Tools must be downloaded following the instructions on the websites. The resulting folders and binary executable files must be saved in a _scripts_ folder. 
+
+The version of the tools that have been tested with the scripts available on the repository are as follows: 
+* STAR: 2.7 
+* Trimmomatic: 0.39
+* FastQC: 4.9.3 
+* featureCounts: Version 1.6.4 of Subread package 
 ## RNA-Seq pipeline
 On the _RNA-Seq_ folder, you will find the necessary tools to run a RNA-Seq pipeline on your terminal in a Unix environment. Several folder are located within it: 
 * data: _fasta_, _gff_ and a subfolder _subdata_ must be added in this folder. 
